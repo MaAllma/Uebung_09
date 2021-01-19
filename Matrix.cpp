@@ -13,7 +13,7 @@ Matrix::Matrix(size_t rows, size_t cols)
 
 
  std::string Matrix::toString(){
-  std::string result = "Matrix: \n";
+  std::string result = "Matrix: ";
   for (size_t i = 0; i < rows_ * cols_; i++){
     if(i%cols_ == 0){
       result = result + "\n" + std::to_string(data_[i]) + " ";

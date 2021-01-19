@@ -78,43 +78,23 @@ int main(int argc, char* argv[])
 		
 		//reading
 
-		
-
-		//das einlesen der Zahlenfolge funktioniert noch nicht so ganz :/
-		//meine Idee war es das CharArray durchzugehen und jedes char einzeln als Zahl zu konvertieren, aber das scheint so nicht ganz zu gehen
-		//auch die Erkennung, dass es sich um eine 0 handelt klappt noch nicht so ganz :/
-
 		/* <--- 1. argument: Wurffolge ---> */
-		char* numbers = argv[1];
-		size_t length = 3;
+		std::string sequenceString = argv[1];
 
-		//Zur Kontrolle:
-		std::cout  << "lenght: " <<  length << std::endl;
-		std::cout << "numbers: " << numbers << std::endl;
-
-		//char stückweise durchgehen, zu int konvertieren und in den sequence vector einfügen
-		for (int i = 0; i < length; i++) {
+		for (int i = 0; i < sequenceString.size(); i++) {
 
 			//Konvertieren des char zu int
-			char c = numbers[i];
-			int number = (int)c;
+			int number = (int)sequenceString[i];
 			number = number - 48;
 			
-			//überprüfen ob die Zahlenfolge nur aus 0en oder 1en besteht
-			if (number != 0 || number != 1){
+			//checks if the numbers are 1 or 0
+			if (number != 1 && number != 0){
 
-				//zum Verständniss::
-				std::cout << "char: " << c << std::endl;
-				std::cout << "int: " << number << std::endl;
-
-				//wirkliche Fehlermeldung:
 				std::cerr << "The sequence can only contain 0 or 1\n";
-				//return -1;
+				return -1;
 			}
-			
-			//Sequenz in der die Münzwurfabfolge gespeichert wird
+
 			sequence.push_back(number);
-			std::cout << "Sequence size" << sequence.size() << std::endl;
 		}
 
 
@@ -168,22 +148,22 @@ int main(int argc, char* argv[])
 
 		/* <--- backtracking ---> */
 
-		//Vector in dem die Abfolge der Münzen gespeichert wird = Ausgabe des Programms
+		//Output = coin sequence
 		std::vector<char> result;
 
-		//letzte Münze (statt end)
+		//last coin
 		char last_coin;
-		//max der beiden Zeilen
+		//max
 		if (table(0, sequence.size()) > table(1, sequence.size())) last_coin = 'f';
 		else last_coin = 'g';
-		//füge die letzte Münze vorne in das Ergebnis an
+		//adds last coin to the result 
 		result.insert(result.begin(), last_coin);
 
 		
 		//Backtracking:
 		for (size_t i = sequence.size(); i > 1; i--){
-			//rückwärts durch die Matrix gehen
-			//wähle das Feld der aktuell letzten Münze und suche von dort aus das Maximum
+			//backwards through matrix
+			//max
 			if (last_coin == 'f'){
 				if (table(0,i-1) + log10(transition(0,0)) > table(1,i-1) + log10(transition(1,0))){
 					last_coin = 'f';
@@ -195,12 +175,12 @@ int main(int argc, char* argv[])
 				}
 				else last_coin = 'g';
 			}
-			//füge die Münze vorne in das Ergebnis an
+			//adds coin to result
 			result.insert(result.begin(), last_coin);
 			
 		}
 
-		//zu Kontrolle
+		//Table
 		std::cerr << table.toString();
 
 		//print result
@@ -214,7 +194,6 @@ int main(int argc, char* argv[])
 
 	//program is used with to little or to many arguments
 	} else {
-		//std:: cerr << argc;
 		std::cerr << "Run program with:\n" <<
 		"- a sequence of coin toss,\n" <<
 		"- a probability for starting with the fair coin,\n" <<
